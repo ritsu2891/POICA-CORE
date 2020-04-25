@@ -1,11 +1,13 @@
+const { Sequelize, DataTypes } = require('sequelize');
 var sequelize = require("../../config/db.js");
 
-try {
-    sequelize.authenticate().then(() => {
-        console.log('Connection has been established successfully.');
-    });
-} catch (error) {
-    console.error('Unable to connect to the database:', error);
-}
+const User = sequelize.define('User', {
+    DisplayName: {
+        type: DataTypes.STRING,
+    },
+    AccessToken: {
+        type: DataTypes.STRING
+    }
+});
 
-module.exports = {};
+module.exports = User;
