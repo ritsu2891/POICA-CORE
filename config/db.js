@@ -1,7 +1,6 @@
-var mysql = require('mysql');
-var connection = mysql.createConnection({
+const { Sequelize } = require('sequelize');
+
+module.exports = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PSWD, {
     host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PSWD
+    dialect: 'mysql'
 });
-module.exports = connection;

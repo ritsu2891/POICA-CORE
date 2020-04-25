@@ -5,5 +5,4 @@ require('dotenv').config({
   path: 'config/environment/.env.' + app.get('env')
 });
 
-var dbconn = require("../config/db.js");
-dbconn.connect();
+require("./models/User.model.js");
