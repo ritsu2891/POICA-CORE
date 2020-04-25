@@ -2,8 +2,9 @@
   "name": "dev.rpaka.poica.backend",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "app/index.js",
   "scripts": {
+    "start": "node app/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Ritsuki KOKUBO",
@@ -11,6 +12,6 @@
   "dependencies": {
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "sequelize": "^5.21.7"
+    "mysql": "^2.18.1"
   }
 }
