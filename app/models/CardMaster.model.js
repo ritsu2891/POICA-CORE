@@ -11,6 +11,16 @@ const CardMaster = sequelize.define('CardMaster', {
   },
   OwnerUser: {
     type: DataTypes.BIGINT
+  },
+  ShowInList: {
+    type: DataTypes.BOOLEAN,
+  },
+  RegByURL: {
+    type: DataTypes.BOOLEAN
+  },
+  RegToken: {
+    type: DataTypes.UUID,
+    defaultValue: Sequelize.UUIDV4
   }
 });
 

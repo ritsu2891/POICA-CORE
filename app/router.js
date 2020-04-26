@@ -55,7 +55,9 @@ router.post('/add-master', (req, res) => {
   console.log(req.body);
   const newMaster = CardMaster.create({
     'Style': req.body.style,
-    'OwnerUser': 1 // DUMMY!
+    'OwnerUser': 1, // DUMMY!
+    'ShowInList': req.body.showinlist,
+    'RegByURL': req.body.regbyurl,
   });
   res.json({result: 'ok'});
 })
