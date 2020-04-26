@@ -62,4 +62,12 @@ router.post('/add-master', (req, res) => {
   res.json({result: 'ok'});
 })
 
+function errRes(errtype, message) {
+  return {
+    'result': 'error',
+    'type': errtype,
+    'message': message
+  };
+}
+
 module.exports = router;
