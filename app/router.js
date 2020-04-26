@@ -16,6 +16,7 @@ router.get('/registered', (req, res) => {
             }
         })
         const rescards = cards.map(c => ({
+                id: c.ID,
                 master: c.Master,
                 point: c.Point
             }));
