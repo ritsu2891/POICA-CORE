@@ -27,6 +27,9 @@ CardMaster.init({
   RegToken: {
     type: DataTypes.UUID,
     defaultValue: Sequelize.UUIDV4
+  },
+  UserToUserPointOpt: {
+    type: DataTypes.BOOLEAN,
   }
 }, {sequelize});
 
