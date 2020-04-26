@@ -8,6 +8,9 @@ require('dotenv').config({
 var cors = require("../config/middlewares/cors.js");
 app.use(cors);
 
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }));
+
 const router = require('./router.js');
 app.use('/cards', router);
 
