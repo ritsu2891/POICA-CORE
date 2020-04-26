@@ -4,24 +4,24 @@ const Card = require("./models/Card.model.js");
 const router = express.Router();
 
 router.get('/registered', (req, res) => {
-    (async function () {
-        const currentUser = await User.findOne({
-            where: {
-                AccessToken: 'TESTACTKN1'
-            }
-        });
-        const cards = await Card.findAll({
-            where: {
-                OwnerUser: currentUser.id
-            }
-        })
-        const rescards = cards.map(c => ({
-                id: c.ID,
-                master: c.Master,
-                point: c.Point
-            }));
-        res.json(rescards);
-    })();
+  (async function () {
+    const currentUser = await User.findOne({
+      where: {
+        AccessToken: 'TESTACTKN1'
+      }
+    });
+    const cards = await Card.findAll({
+      where: {
+        OwnerUser: currentUser.id
+      }
+    })
+    const rescards = cards.map(c => ({
+        id: c.ID,
+        master: c.Master,
+        point: c.Point
+      }));
+    res.json(rescards);
+  })();
 });
 
 module.exports = router;
