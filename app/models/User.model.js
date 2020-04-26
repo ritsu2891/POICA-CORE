@@ -2,6 +2,10 @@ const { Sequelize, DataTypes } = require('sequelize');
 var sequelize = require("../../config/db.js");
 
 const User = sequelize.define('User', {
+    ID: {
+        type: DataTypes.INET,
+        primaryKey: true
+    },
     DisplayName: {
         type: DataTypes.STRING,
     },
