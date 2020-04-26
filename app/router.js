@@ -13,7 +13,7 @@ router.get('/registered', (req, res) => {
     });
     const cards = await Card.findAll({
       where: {
-        OwnerUser: currentUser.id
+        OwnerUser: currentUser.ID
       }
     })
     const rescards = cards.map(c => ({
@@ -22,6 +22,43 @@ router.get('/registered', (req, res) => {
         point: c.Point
       }));
     res.json(rescards);
+  })();
+});
+
+// ポイントカードを登録
+/* 
+  {
+    route: 'list' | 'url',
+    masterid: '',
+  }
+*/
+router.post('/register', (req, res) => {
+  (async function () {
+    const master = await CardMaster.findOne({
+      where: {
+        ID: req.body.masterid
+      }
+    });
+    if (isEmpty(master)) {
+      res.status(400).json(errRes('MASTER_NOT_FOUND', 'Point Card Master you posted was not found'));
+      return;
+    }
+    if (master.canRegisterByUser()) {
+      res.status(400).json(errRes('CANNOT_REGISTER_BY_USER', 'This point card can not be registered by user'));
+      return;
+    }
+    if (!master.ShowInList) {
+      if (isEmpty(req.body.regtoken) & req.body.regtoken != master.RegToken) {
+        res.status(400).json(errRes('CANNOT_REGISTER_BY_USER', 'This point card can not be registered by user'));
+        return;
+      }
+    }
+    const newCard = Card.create({
+      'Master': master.ID,
+      'OwnerUser': 1, // DUMMY!
+    });
+    res.json({result: 'ok'});
+    return;
   })();
 });
 
@@ -68,6 +105,17 @@ function errRes(errtype, message) {
     'type': errtype,
     'message': message
   };
+}
+
+function isEmpty(val){
+  if (!val) { // null|undefined|''|0|false
+    if ( val !== 0 && val !== false ) {
+      return true;
+    }
+  }　else if　(typeof val == "object"){ //array|object
+    return Object.keys(val).length === 0;
+  }
+  return false; // 値は空ではない
 }
 
 module.exports = router;

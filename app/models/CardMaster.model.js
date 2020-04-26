@@ -1,7 +1,13 @@
-const { Sequelize, DataTypes } = require('sequelize');
+const { Sequelize, DataTypes, Model } = require('sequelize');
 var sequelize = require("../../config/db.js");
 
-const CardMaster = sequelize.define('CardMaster', {
+class CardMaster extends Model {
+  canRegisterByUser() {
+    return this.ShowInList | this.RegByURL;
+  }
+}
+
+CardMaster.init({
   ID: {
     type: DataTypes.INET,
     primaryKey: true
@@ -22,6 +28,6 @@ const CardMaster = sequelize.define('CardMaster', {
     type: DataTypes.UUID,
     defaultValue: Sequelize.UUIDV4
   }
-});
+}, {sequelize});
 
 module.exports = CardMaster;
