@@ -13,6 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 
 const router = require('./router.js');
 app.use('/cards', router);
+app.use('/points', require('./api/point.js'));
 
 var server = app.listen(4000, function () {
   var host = server.address().address;
