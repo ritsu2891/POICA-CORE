@@ -3,6 +3,7 @@ const User = require("./models/User.model.js");
 const Card = require("./models/Card.model.js");
 const CardMaster = require("./models/CardMaster.model.js");
 const router = express.Router();
+const { isEmpty } = require('./util.js');
 
 router.get('/registered', (req, res) => {
   (async function () {
@@ -107,15 +108,5 @@ function errRes(errtype, message) {
   };
 }
 
-function isEmpty(val){
-  if (!val) { // null|undefined|''|0|false
-    if ( val !== 0 && val !== false ) {
-      return true;
-    }
-  }　else if　(typeof val == "object"){ //array|object
-    return Object.keys(val).length === 0;
-  }
-  return false; // 値は空ではない
-}
 
 module.exports = router;
