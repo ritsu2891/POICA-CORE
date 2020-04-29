@@ -12,6 +12,14 @@ module.exports.isEmpty = function(val) {
   return false; // 値は空ではない
 }
 
+module.exports.filterObject = function(obj, allowKey) {
+  resObj = {};
+  Object.values(allowKey).forEach((key) => {
+    resObj[key] = obj[key];
+  });
+  return resObj;
+}
+
 module.exports.currentUser = async function() {
   return await User.findOne({
     where: {
