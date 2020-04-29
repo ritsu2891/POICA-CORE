@@ -12,6 +12,7 @@ if (app.get('env') != 'test') {
   app.use(express.urlencoded({ extended: true }));
 
   app.use('/cards', require('./api/card.js'));
+  app.use('/cardmasters', require('./api/cardmaster.js'));
   app.use('/points', require('./api/point.js'));
 
   var server = app.listen(4000, function () {
