@@ -16,16 +16,21 @@ fs
   });
 
 Object.keys(db).forEach(modelName => {
-  const assoc = db[modelName].associate;
-  if (assoc) {
-    Object.keys(assoc).forEach(relation => {
-      const model = db[assoc[relation].model];
-      const options = assoc[relation].options;
+  const assocSet = db[modelName].associate;
+  if (assocSet) {
+    Object.keys(assocSet).forEach(relation => {
+      const assocs = assocSet[relation];
+      if (Array.isArray(assocs)) {
+        assocs.forEach(assoc => {
+          const model = db[assoc.model];
+          const options = assoc.options;
 
-      if (options) {
-        db[modelName][relation](model, options);
-      } else {
-        db[modelName][relation](model);
+          if (options) {
+            db[modelName][relation](model, options);
+          } else {
+            db[modelName][relation](model);
+          }
+        });
       }
     });
   }

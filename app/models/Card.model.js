@@ -3,13 +3,13 @@ var sequelize = require("../../config/db.js");
 
 class Card extends Model {
   static associate = {
-    belongsTo: {
+    belongsTo: [{
       model: 'User',
       options: {
         as: 'OwnerUser',
         foreignKey: 'ownerUserID'
       }
-    }
+    }]
   }
 }
 
