@@ -4,8 +4,7 @@ var app = express();
 require('dotenv').config({
   path: 'config/environment/.env.' + app.get('env')
 });
-
-if (app.get('env') !== 'test') {
+if (app.get('env') != 'test') {
   var cors = require("../config/middlewares/cors.js");
   app.use(cors);
 
