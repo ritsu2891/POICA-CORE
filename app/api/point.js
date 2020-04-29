@@ -19,7 +19,7 @@ router.post('/op-admin2user', (req, res) => {
     // DUMMY!
     const currentUserId = 1;
 
-    const targetCard = await Card.finedOne({
+    const targetCard = await Card.findOne({
       where: {
         ID: req.body.targetcardid
       }
@@ -47,6 +47,8 @@ router.post('/op-admin2user', (req, res) => {
     }
     targetCard.Point += Number(req.body.value) | 0;
     targetCard.save();
+
+    res.json({result: 'ok'});
   })();
 });
 
@@ -104,6 +106,8 @@ router.post('/op-user2user', (req, res) => {
     }
     targetCard.Point += Number(req.body.value) | 0;
     targetCard.save();
+
+    res.json({result: 'ok'});
   })();
 });
 
