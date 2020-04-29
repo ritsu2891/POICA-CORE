@@ -1,8 +1,12 @@
-const { Sequelize, DataTypes } = require('sequelize');
+const { Sequelize, DataTypes, Model } = require('sequelize');
 var sequelize = require("../../config/db.js");
 
 class User extends Model {
-  // ...
+  static associate = {
+    hasMany: {
+      model: 'Card',
+    }
+  }
 }
 
 User.init({
