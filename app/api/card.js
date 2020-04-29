@@ -1,6 +1,6 @@
 var express = require("express");
 const router = express.Router();
-const { isEmpty, currentUser } = require('../util.js');
+const { isEmpty, filterObject, currentUser } = require('../util.js');
 
 const models = require('../models');
 const User = models.User;
@@ -10,11 +10,10 @@ const CardMaster = models.CardMaster;
 router.get('/registered', (req, res) => {
   (async function () {
     const cards = await (await currentUser()).getRegisteredCards();
-    const rescards = cards.map(c => ({
-        id: c.ID,
-        master: c.Master,
-        point: c.Point
-      }));
+    const rescards = cards.map((card) => {
+      console.log(card.toJSON());
+      return filterObject(card.toJSON(), ['id', 'masterId', 'point']);
+    });
     res.json(rescards);
   })();
 });
