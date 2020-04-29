@@ -1,19 +1,15 @@
 var express = require("express");
-const User = require("../models/User.model.js");
-const Card = require("../models/Card.model.js");
-const CardMaster = require("../models/CardMaster.model.js");
 const router = express.Router();
-const { isEmpty } = require('../util.js');
+const { isEmpty, currentUser } = require('../util.js');
 
-const currentUser = 1;
+const models = require('../models');
+const User = models.User;
+const Card = models.Card;
+const CardMaster = models.CardMaster;
 
 router.get('/registered', (req, res) => {
   (async function () {
-    const cards = await Card.findAll({
-      where: {
-        OwnerUser: currentUser.ID
-      }
-    })
+    const cards = await (await currentUser()).getRegisteredCards();
     const rescards = cards.map(c => ({
         id: c.ID,
         master: c.Master,
@@ -53,8 +49,8 @@ router.post('/register', (req, res) => {
     }
     const newCard = Card.create({
       'Master': master.ID,
-      'OwnerUser': 1, // DUMMY!
     });
+    newCard.setOwnerUser(currentUser);
     res.json({result: 'ok'});
     return;
   })();
