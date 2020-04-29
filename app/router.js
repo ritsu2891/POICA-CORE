@@ -29,8 +29,8 @@ router.get('/registered', (req, res) => {
 // ポイントカードを登録
 /* 
   {
-    route: 'list' | 'url',
     masterid: '',
+    regtoken: '',
   }
 */
 router.post('/register', (req, res) => {
@@ -44,12 +44,12 @@ router.post('/register', (req, res) => {
       res.status(400).json(errRes('MASTER_NOT_FOUND', 'Point Card Master you posted was not found'));
       return;
     }
-    if (master.canRegisterByUser()) {
+    if (!master.canRegisterByUser()) {
       res.status(400).json(errRes('CANNOT_REGISTER_BY_USER', 'This point card can not be registered by user'));
       return;
     }
     if (!master.ShowInList) {
-      if (isEmpty(req.body.regtoken) & req.body.regtoken != master.RegToken) {
+      if (isEmpty(req.body.regtoken) | req.body.regtoken != master.RegToken) {
         res.status(400).json(errRes('CANNOT_REGISTER_BY_USER', 'This point card can not be registered by user'));
         return;
       }
