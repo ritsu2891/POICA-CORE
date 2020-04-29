@@ -6,6 +6,8 @@ const PointOpReq = require("../models/PointOpReq.model.js");
 const router = express.Router();
 const { isEmpty } = require('../util.js');
 
+const currentUser = 1;
+
 // カードマスタ管理者による操作 (宛先明確)
 /*
 {
@@ -16,9 +18,6 @@ const { isEmpty } = require('../util.js');
 */
 router.post('/op-admin2user', (req, res) => {
   (async function () {
-    // DUMMY!
-    const currentUserId = 1;
-
     const targetCard = await Card.findOne({
       where: {
         ID: req.body.targetcardid
@@ -60,9 +59,6 @@ router.post('/op-admin2user', (req, res) => {
 */
 router.post('/op-user2user', (req, res) => {
   (async function () {
-    // DUMMY!
-    const currentUserId = 1;
-
     const targetCard = await Card.finedOne({
       where: {
         ID: req.body.targetcardid
@@ -161,9 +157,6 @@ router.post('/op-admin2user-nd', (req, res) => {
 */
 router.post('/op-user2user-nd', (req, res) => {
   (async function () {
-    // DUMMY!
-    const currentUserId = 1;
-
     const targetCardMaster = await CardMaster.findOne({
       where: {
         ID: req.body.Master
@@ -216,8 +209,6 @@ router.post('/op-user2user-nd', (req, res) => {
 */
 router.post('/receive', (req, res) => {
   (async function () {
-    const currentUserId = 1;
-
     const opreq = await PointOpReq.findOne({
       where: {
         Token: req.body.Token,

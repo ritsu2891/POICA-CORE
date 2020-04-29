@@ -5,13 +5,10 @@ const CardMaster = require("../models/CardMaster.model.js");
 const router = express.Router();
 const { isEmpty } = require('../util.js');
 
+const currentUser = 1;
+
 router.get('/registered', (req, res) => {
   (async function () {
-    const currentUser = await User.findOne({
-      where: {
-        AccessToken: 'TESTACTKN1'
-      }
-    });
     const cards = await Card.findAll({
       where: {
         OwnerUser: currentUser.ID
@@ -70,11 +67,6 @@ router.post('/register', (req, res) => {
 // 自分が管理しているポイントカードマスタ一覧取得
 router.get('/master', (req, res) => {
   (async function () {
-    const currentUser = await User.findOne({
-      where: {
-        AccessToken: 'TESTACTKN1'
-      }
-    });
     const masters = await CardMaster.findAll({
       where: {
         OwnerUser: currentUser.id
