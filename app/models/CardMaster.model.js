@@ -5,6 +5,16 @@ class CardMaster extends Model {
   canRegisterByUser() {
     return this.showInList | this.regByURL;
   }
+
+  static associate = {
+    hasMany: [{
+      model: 'Card',
+      options: {
+        as: 'SlaveCards',
+        foreignKey: 'masterID',
+      }
+    }]
+  }
 }
 
 CardMaster.init({
