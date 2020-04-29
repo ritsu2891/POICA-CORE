@@ -11,7 +11,6 @@ router.get('/registered', (req, res) => {
   (async function () {
     const cards = await (await currentUser()).getRegisteredCards();
     const rescards = cards.map((card) => {
-      console.log(card.toJSON());
       return filterObject(card.toJSON(), ['id', 'masterId', 'point']);
     });
     res.json(rescards);
