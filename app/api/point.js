@@ -1,202 +1,121 @@
 var express = require("express");
-const User = require("../models/User.model.js");
-const Card = require("../models/Card.model.js");
-const CardMaster = require("../models/CardMaster.model.js");
-const PointOpReq = require("../models/PointOpReq.model.js");
 const router = express.Router();
-const { isEmpty } = require('../util.js');
+const { isEmpty, currentUser } = require('../util.js');
 
-const currentUser = 1;
+const models = require('../models');
+const Card = models.Card;
+const CardMaster = models.CardMaster;
+const PointOpReq = models.PointOpReq;
 
 // カードマスタ管理者による操作 (宛先明確)
 /*
 {
-  TargetCardID: _,
-  OpType: 'point-free',
-  Value: _,
+  as: 'admin' | 'user',
+  media: 'direct' | 'uuid',
+  masterid: _,
+  cardid: _,
+  optype: 'point-free',
+  value: _,
 }
 */
-router.post('/op-admin2user', (req, res) => {
+router.post('/give', (req, res) => {
   (async function () {
-    const targetCard = await Card.findOne({
-      where: {
-        ID: req.body.targetcardid
-      }
-    });
-    if (isEmpty(targetCard)) {
-      res.status(400).json(errRes('CARD_NOT_FOUND', 'Card was not found'));
-      return;
-    }
-    const targetCardMaster = await CardMaster.findOne({
-      where: {
-        ID: targetCard.Master
-      }
-    });
-    if (isEmpty(targetCardMaster)) {
-      res.status(400).json(errRes('MASTER_NOT_FOUND', 'Card Master was not found'));
-      return;
-    }
-    if (currentUserId != targetCardMaster.OwnerUser) {
-      res.status(400).json(errRes('NO_PERMISSION', 'You can not operate requested action'));
-      return;
-    }
-    if (!Number.isInteger(Number(req.body.value))) {
-      res.status(400).json(errRes('INVALID_VALUE', 'Value must be integer'));
-      return;
-    }
-    targetCard.Point += Number(req.body.value) | 0;
-    targetCard.save();
+    const cu = currentUser();
 
-    res.json({result: 'ok'});
-  })();
-});
+    const as = req.body.as;
+    const media = req.body.media;
+    const cardid = req.body.cardid;
+    const masterid = req.body.masterid;
 
-// カード所有者間の操作 (宛先明確)
-/*
-  TargetCardID: _,
-  OpType: 'point-free',
-  Value: _,
-*/
-router.post('/op-user2user', (req, res) => {
-  (async function () {
-    const targetCard = await Card.finedOne({
-      where: {
-        ID: req.body.targetcardid
-      }
-    });
-    if (isEmpty(targetCard)) {
-      res.status(400).json(errRes('CARD_NOT_FOUND', 'Card was not found'));
+    const opType = req.body.optype;
+    const value = req.body.value;
+
+    const targetCard = undefined;
+    const targetCardMaster = undefined;
+
+    // パラメータチェック
+    if (media == 'direct' && isEmpty(cardid)) {
+      res.status(400).json(errRes('PARAM_LACK', 'Please specify target card'));
       return;
     }
-    const targetCardMaster = await CardMaster.findOne({
-      where: {
-        ID: targetCard.Master
+    if (media == 'uuid' && isEmpty(cardid) && isEmpty(masterid)) {
+      res.status(400).json(errRes('PARAM_LACK', 'Please specify target master or target card'));
+      return;
+    }
+
+    // 対象ポイントカードマスタの特定
+    if (isEmpty(masterid)) {
+      targetCard = await Card.findOne({
+        where: {
+          id: req.body.targetcardid
+        }
+      });
+      if (isEmpty(targetCard)) {
+        res.status(400).json(errRes('CARD_NOT_FOUND', 'Card was not found'));
+        return;
       }
-    });
+      targetCardMaster = await targetCard.getCardMaster();
+    } else {
+      targetCardMaster = await CardMaster.findOne({
+        where: {
+          id: masterid
+        }
+      });
+    }
     if (isEmpty(targetCardMaster)) {
       res.status(400).json(errRes('MASTER_NOT_FOUND', 'Card Master was not found'));
       return;
     }
 
-    // ========= ここまでおんなじ =================
-
-    if (!targetCardMaster.UserToUserPointOp) {
-      res.status(400).json(errRes('NO_PERMISSION', 'You can not operate requested action'));
-      return;
-    }
-    const operatorCard = await Card.findOne({
-      where: {
-        Master: targetCard.Master
+    // ポイント付与権限を確認
+    if (as == 'admin') {
+      if (cu.id != targetCardMaster.OwnerUser) {
+        res.status(400).json(errRes('NO_PERMISSION', 'You can not operate requested action'));
+        return;
       }
-    });
-    if (isEmpty(operatorCard)) {
-      res.status(400).json(errRes('NO_PERMISSION', 'You can not operate requested action'));
-      return;
-    }
-
-    // ========= ここからおんなじ =================    
-
-    if (!Number.isInteger(Number(req.body.value))) {
-      res.status(400).json(errRes('INVALID_VALUE', 'Value must be integer'));
-      return;
-    }
-    targetCard.Point += Number(req.body.value) | 0;
-    targetCard.save();
-
-    res.json({result: 'ok'});
-  })();
-});
-
-// カードマスタ管理者による操作 (宛先不明)
-/*
-{
-  Master: _,
-  OpType: 'point-free',
-  Value: _,
-}
-*/
-router.post('/op-admin2user-nd', (req, res) => {
-  (async function () {
-    const currentUserId = 1;
-
-    const targetCardMaster = await CardMaster.findOne({
-      where: {
-        ID: req.body.Master
+    } else if (as == 'user') {
+      if (!targetCardMaster.UserToUserPointOp) {
+        res.status(400).json(errRes('NO_PERMISSION', 'You can not operate requested action'));
+        return;
       }
-    });
-    if (isEmpty(targetCardMaster)) {
-      res.status(400).json(errRes('MASTER_NOT_FOUND', 'Card Master was not found'));
-      return;
+      const operatorCard = await Card.findOne({
+        where: {
+          masterId: targetCardMaster.id,
+          ownerUserId: cu.id,
+        }
+      });
+      if (isEmpty(operatorCard)) {
+        res.status(400).json(errRes('NO_PERMISSION', 'You can not operate requested action'));
+        return;
+      }
     }
-    if (currentUserId != targetCardMaster.OwnerUser) {
-      res.status(400).json(errRes('NO_PERMISSION', 'You can not operate requested action'));
-      return;
-    }
-    if (!Number.isInteger(Number(req.body.value))) {
+
+    // ポイント付与・発行
+    numValue = Number(value);
+    if (!Number.isInteger(numValue)) {
       res.status(400).json(errRes('INVALID_VALUE', 'Value must be integer'));
       return;
     }
 
-    PointOpReq.create({
-      OperatorUserID: currentUserId,
-      OpType: req.body.OpType,
-      Value: req.body.Value,
-    });
+    if (media == 'direct') {
+      targetCard.Point += numValue | 0;
+      targetCard.save();
 
-    res.json({result: 'ok'});
-  })();
-});
+      res.json({result: 'ok'});
+    } else if (media == 'uuid') {
+      const opReq = await PointOpReq.create({
+        operatorUserID: cu.id,
+        opType: opType,
+        value: value,
+      });
 
-// カード所有者間の操作 (宛先不明)
-/*
-{
-  TargetMasterID: _,
-  OpType: 'point-free',
-  Value: _,
-}
-*/
-router.post('/op-user2user-nd', (req, res) => {
-  (async function () {
-    const targetCardMaster = await CardMaster.findOne({
-      where: {
-        ID: req.body.Master
-      }
-    });
-    if (isEmpty(targetCardMaster)) {
-      res.status(400).json(errRes('MASTER_NOT_FOUND', 'Card Master was not found'));
-      return;
+      res.json({
+        result: 'ok',
+        token: opReq.token
+      });
     }
 
-    // ========= ここまでおんなじ =================
-
-    if (!targetCardMaster.UserToUserPointOp) {
-      res.status(400).json(errRes('NO_PERMISSION', 'You can not operate requested action'));
-      return;
-    }
-    const operatorCard = await Card.findOne({
-      where: {
-        Master: targetCard.Master
-      }
-    });
-    if (isEmpty(operatorCard)) {
-      res.status(400).json(errRes('NO_PERMISSION', 'You can not operate requested action'));
-      return;
-    }
-
-    // ========= ここからおんなじ =================    
-
-    if (!Number.isInteger(Number(req.body.value))) {
-      res.status(400).json(errRes('INVALID_VALUE', 'Value must be integer'));
-      return;
-    }
-
-    PointOpReq.create({
-      OperatorUserID: currentUserId,
-      OpType: req.body.OpType,
-      Value: req.body.Value,
-    });
-
-    res.json({result: 'ok'});
+    return;
   })();
 });
 
@@ -209,19 +128,25 @@ router.post('/op-user2user-nd', (req, res) => {
 */
 router.post('/receive', (req, res) => {
   (async function () {
+    const cu = currentUser();
+
+    const token = req.body.token;
+    const cardid = req.body.cardid;
+
     const opreq = await PointOpReq.findOne({
       where: {
-        Token: req.body.Token,
+        token: token,
       }
     });
     if (isEmpty(opreq)) {
       res.status(400).json(errRes('INVALID_TOKEN', 'Token is invalid'));
       return;
     }
+    // TODO: 有効期限確認
     const targetCard = await Card.findOne({
       where: {
-        ID: req.body.ID,
-        OwnerUser: currentUserId,
+        id: cardid,
+        ownerUserId: cu.id,
       }
     });
     if (isEmpty(targetCard)) {
@@ -229,7 +154,9 @@ router.post('/receive', (req, res) => {
       return;
     }
 
-    targetCard.Point += Number(req.body.value) | 0;
+    // TODO: valueが数値かどうかの検証
+
+    targetCard.Point += Number(opreq.value) | 0;
     targetCard.save();
 
     res.json({result: 'ok'});
