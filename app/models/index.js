@@ -18,7 +18,6 @@ fs
 Object.keys(db).forEach(modelName => {
   const assoc = db[modelName].associate;
   if (assoc) {
-    console.log(assoc);
     Object.keys(assoc).forEach(relation => {
       const model = db[assoc[relation].model];
       const options = assoc[relation].options;
