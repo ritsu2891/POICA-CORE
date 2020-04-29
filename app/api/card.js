@@ -7,7 +7,7 @@ const User = models.User;
 const Card = models.Card;
 const CardMaster = models.CardMaster;
 
-router.get('/registered', (req, res) => {
+router.get('/list', (req, res) => {
   (async function () {
     const cards = await (await currentUser()).getRegisteredCards();
     const rescards = cards.map((card) => {
@@ -24,7 +24,7 @@ router.get('/registered', (req, res) => {
     regtoken: '',
   }
 */
-router.post('/register', (req, res) => {
+router.post('/add', (req, res) => {
   (async function () {
     const master = await CardMaster.findOne({
       where: {
@@ -56,38 +56,6 @@ router.post('/register', (req, res) => {
   })();
 });
 
-/*
- * ポイントカードマスタ 
- */
-
-// 自分が管理しているポイントカードマスタ一覧取得
-router.get('/master', (req, res) => {
-  (async function () {
-    const masters = await CardMaster.findAll({
-      where: {
-        OwnerUser: currentUser.id
-      }
-    });
-    const resmasters = masters.map(m => ({
-      id: m.ID,
-      style: m.Style
-    }));
-    res.json(resmasters);
-  })();
-});
-
-// ポイントカードマスタの新規作成
-router.post('/add-master', (req, res) => {
-  console.log(req.body);
-  const newMaster = CardMaster.create({
-    'Style': req.body.style,
-    'OwnerUser': 1, // DUMMY!
-    'ShowInList': req.body.showinlist,
-    'RegByURL': req.body.regbyurl,
-  });
-  res.json({result: 'ok'});
-})
-
 function errRes(errtype, message) {
   return {
     'result': 'error',
@@ -95,6 +63,5 @@ function errRes(errtype, message) {
     'message': message
   };
 }
-
 
 module.exports = router;
