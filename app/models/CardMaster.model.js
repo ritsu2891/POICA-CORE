@@ -3,32 +3,28 @@ var sequelize = require("../../config/db.js");
 
 class CardMaster extends Model {
   canRegisterByUser() {
-    return this.ShowInList | this.RegByURL;
+    return this.showInList | this.regByURL;
   }
 }
 
 CardMaster.init({
-  ID: {
-    type: DataTypes.INET,
-    primaryKey: true
-  },
-  Style: {
+  style: {
     type: DataTypes.INET,
   },
-  OwnerUser: {
+  ownerUser: {
     type: DataTypes.BIGINT
   },
-  ShowInList: {
+  showInList: {
     type: DataTypes.BOOLEAN,
   },
-  RegByURL: {
+  regByURL: {
     type: DataTypes.BOOLEAN
   },
-  RegToken: {
+  regToken: {
     type: DataTypes.UUID,
     defaultValue: Sequelize.UUIDV4
   },
-  UserToUserPointOpt: {
+  userToUserPointOpt: {
     type: DataTypes.BOOLEAN,
   }
 }, {sequelize});

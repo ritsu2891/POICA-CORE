@@ -6,21 +6,17 @@ class PointOpReq extends Model {
 }
 
 PointOpReq.init({
-  ID: {
-    type: DataTypes.INET,
-    primaryKey: true
-  },
-  Token: {
+  token: {
     type: DataTypes.UUID,
     defaultValue: Sequelize.UUIDV4,
   },
-  OperatorUserID: {
+  operatorUserID: {
     type: DataTypes.INET,
   },
-  OpType: {
+  opType: {
     type: DataTypes.INET,
   },
-  Value: {
+  value: {
     type: DataTypes.INET,
   }
 }, {sequelize});

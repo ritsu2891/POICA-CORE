@@ -7,21 +7,17 @@ class User extends Model {
       model: 'Card',
       options: {
         as: 'RegisteredCards', // 複数形限定! https://sequelize.org/master/class/lib/model.js~Model.html#static-method-hasMany
-        foreignKey: 'OwnerUserID', // モデル両方に指定
+        foreignKey: 'ownerUserID', // モデル両方に指定
       }
     }
   }
 }
 
 User.init({
-  // ID: {
-  //   type: DataTypes.INET,
-  //   primaryKey: true
-  // },
-  DisplayName: {
+  displayName: {
     type: DataTypes.STRING,
   },
-  AccessToken: {
+  accessToken: {
     type: DataTypes.STRING
   }
 }, {sequelize});

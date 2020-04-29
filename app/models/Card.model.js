@@ -7,17 +7,20 @@ class Card extends Model {
       model: 'User',
       options: {
         as: 'OwnerUser',
-        foreignKey: 'OwnerUserID'
+        foreignKey: 'ownerUserID'
       }
     }
   }
 }
 
 Card.init({
-  MasterID: {
+  masterId: {
     type: DataTypes.BIGINT
   },
-  Point: {
+  ownerUserId: {
+    type: DataTypes.BIGINT
+  },
+  point: {
     type: DataTypes.INET
   },
 }, {sequelize});
