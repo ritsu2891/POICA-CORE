@@ -47,10 +47,12 @@ router.post('/register', (req, res) => {
         return;
       }
     }
-    const newCard = Card.create({
-      'Master': master.ID,
+    const newCard = await Card.create({
+      'MasterID': master.ID,
     });
-    newCard.setOwnerUser(currentUser);
+
+    newCard.setOwnerUser(await currentUser());
+
     res.json({result: 'ok'});
     return;
   })();

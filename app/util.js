@@ -15,7 +15,7 @@ module.exports.isEmpty = function(val) {
 module.exports.currentUser = async function() {
   return await User.findOne({
     where: {
-      ID: 1
+      id: 1
     }
   });
 }

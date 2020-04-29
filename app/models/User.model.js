@@ -14,10 +14,10 @@ class User extends Model {
 }
 
 User.init({
-  ID: {
-    type: DataTypes.INET,
-    primaryKey: true
-  },
+  // ID: {
+  //   type: DataTypes.INET,
+  //   primaryKey: true
+  // },
   DisplayName: {
     type: DataTypes.STRING,
   },

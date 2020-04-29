@@ -14,14 +14,7 @@ class Card extends Model {
 }
 
 Card.init({
-  ID: {
-    type: DataTypes.INET,
-    primaryKey: true
-  },
   MasterID: {
-    type: DataTypes.BIGINT
-  },
-  OwnerUserID: {
     type: DataTypes.BIGINT
   },
   Point: {
