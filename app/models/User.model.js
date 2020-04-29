@@ -1,7 +1,11 @@
 const { Sequelize, DataTypes } = require('sequelize');
 var sequelize = require("../../config/db.js");
 
-const User = sequelize.define('User', {
+class User extends Model {
+  // ...
+}
+
+User.init({
   ID: {
     type: DataTypes.INET,
     primaryKey: true
@@ -12,6 +16,6 @@ const User = sequelize.define('User', {
   AccessToken: {
     type: DataTypes.STRING
   }
-});
+}, {sequelize});
 
 module.exports = User;

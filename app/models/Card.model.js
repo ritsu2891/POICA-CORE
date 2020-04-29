@@ -1,7 +1,11 @@
-const { Sequelize, DataTypes } = require('sequelize');
+const { Sequelize, DataTypes, Model } = require('sequelize');
 var sequelize = require("../../config/db.js");
 
-const Card = sequelize.define('Card', {
+class Card extends Model {
+  // ...
+}
+
+Card.init({
   ID: {
     type: DataTypes.INET,
     primaryKey: true
@@ -15,6 +19,6 @@ const Card = sequelize.define('Card', {
   OwnerUser: {
     type: DataTypes.BIGINT
   }
-});
+}, {sequelize});
 
 module.exports = Card;
