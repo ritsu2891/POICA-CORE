@@ -1,9 +1,9 @@
 var express = require("express");
-const User = require("./models/User.model.js");
-const Card = require("./models/Card.model.js");
-const CardMaster = require("./models/CardMaster.model.js");
+const User = require("../models/User.model.js");
+const Card = require("../models/Card.model.js");
+const CardMaster = require("../models/CardMaster.model.js");
 const router = express.Router();
-const { isEmpty } = require('./util.js');
+const { isEmpty } = require('../util.js');
 
 router.get('/registered', (req, res) => {
   (async function () {
