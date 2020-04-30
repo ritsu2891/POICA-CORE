@@ -15,7 +15,7 @@ module.exports.list = async function() {
 }
 
 // ログイン中のユーザ名義のカードを追加
-module.exports.add = async function(masterId) {
+module.exports.add = async function(masterId, token) {
   const master = await CardMaster.findOne({
     where: {
       ID: masterId
@@ -27,7 +27,7 @@ module.exports.add = async function(masterId) {
   validators.denyInvalidRegToken(master, token);
 
   const newCard = await Card.create({
-    'masterId': master.ID,
+    'masterId': master.id,
   });
 
   newCard.setOwnerUser(await currentUser());
