@@ -5,6 +5,7 @@ const User = models.User;
 const Card = models.Card;
 const CardMaster = models.CardMaster;
 const cardController = require('../app/controllers/card.controller.js');
+const cardMasterController = require('../app/controllers/cardmaster.controller.js');
 
 const testUserId = 1;
 
@@ -120,4 +121,66 @@ describe('card', () => {
       done();
     });
   })
+});
+
+describe('cardmaster', () => {
+  beforeEach(async function (done) {
+    CardMaster.destroy({
+      where: {},
+      truncate: true
+    });
+    done();
+  });
+
+  test('list', async function (done) {
+    var masters = await cardMasterController.list();
+    expect(masters.length).toBe(0);
+
+    await CardMaster.create({
+      ownerUserId: testUserId+1,
+      style: 1,
+      showInList: true,
+      regByURL: true
+    });
+    var masters = await cardMasterController.list();
+    expect(masters.length).toBe(0);
+
+    const newMaster = await CardMaster.create({
+      ownerUserId: testUserId,
+      style: 1,
+      showInList: true,
+      regByURL: true
+    });
+    masters = await cardMasterController.list();
+    expect(masters.length).toBe(1);
+    const master = masters[0];
+    expect(master.style).toBe(1);
+    expect(master.showInList).toBe(true);
+    expect(master.regByURL).toBe(true);
+    expect(master.regToken).toBe(newMaster.regToken);
+
+    done();
+  });
+
+  test('add', async function (done) {
+    var masters = await cardMasterController.list();
+    expect(masters.length).toBe(0);
+
+    const opts = {
+      style: 5,
+      showInList: false,
+      regByURL: true,
+    };
+    await cardMasterController.add(opts);
+
+    masters = await cardMasterController.list();
+    console.log(masters);
+    expect(masters.length).toBe(1);
+    const master = masters[0];
+    expect(master.style).toBe(opts.style);
+    expect(master.showInList).toBe(opts.showInList);
+    expect(master.regByURL).toBe(opts.regByURL);
+
+    done();
+  });
 });
