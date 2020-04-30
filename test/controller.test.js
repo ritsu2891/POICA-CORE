@@ -409,6 +409,89 @@ describe('point', () => {
     });
 
   });
+
+  describe('receive', () => {
+    afterEach(async function (done) {
+      await Card.destroy({
+        where: {},
+        truncate: true
+      });
+      await PointOpReq.destroy({
+        where: {},
+        truncate: true
+      });
+      done();
+    });
+
+    test('正常系', async function (done) {
+      const card = await Card.create({
+        ownerUserId: testUserId,
+        masterId: 1,
+        point: 150
+      });
+      const opReq = await PointOpReq.create({
+        masterId: card.masterId,
+        operatorUserId: testUserId+1,
+        opType: 'f',
+        value: 500
+      });
+
+      await pointController.receive({ token: opReq.token, cardId: card.id });
+
+      await card.reload();
+      expect(card.point).toBe(150 + 500);
+
+      done();
+    });
+
+    test('異常系: トークンが不正', async function (done) {
+      const card = await Card.create({
+        ownerUserId: testUserId,
+        masterId: 1,
+        point: 150
+      });
+      await PointOpReq.create({
+        masterId: card.masterId,
+        operatorUserId: testUserId+1,
+        opType: 'f',
+        value: 500
+      });
+    
+      try {
+        await pointController.receive({ token: 'Foo', cardId: card.id });
+        fail();
+      } catch (e) {
+        // OK
+        await card.reload();
+        expect(card.point).toBe(150);
+      }
+      done();
+    });
+    
+    test('異常系: 自分の持っていないカードを指定する', async function (done) {
+      const card = await Card.create({
+        ownerUserId: testUserId+2,
+        masterId: 1,
+        point: 150
+      });
+      const opReq = await PointOpReq.create({
+        masterId: card.masterId,
+        operatorUserId: testUserId+1,
+        opType: 'f',
+        value: 500
+      });
+    
+      try {
+        await pointController.receive({ token: opReq.token, cardId: card.id });
+        fail();
+      } catch (e) {
+        // OK
+        await card.reload();
+        expect(card.point).toBe(150);
+      }
+      done();
+    });
+  });
 });
 
 /*
