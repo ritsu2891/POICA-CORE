@@ -10,11 +10,11 @@ PointOpReq.init({
     type: DataTypes.UUID,
     defaultValue: Sequelize.UUIDV4,
   },
-  operatorUserID: {
+  operatorUserId: {
     type: DataTypes.INET,
   },
   opType: {
-    type: DataTypes.INET,
+    type: DataTypes.CHAR,
   },
   value: {
     type: DataTypes.INET,
