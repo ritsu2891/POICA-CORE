@@ -82,7 +82,7 @@ module.exports.give = async function(opt) {
 }
 */
 module.exports.receive = async function(opt) {
-  const cu = currentUser();
+  const cu = await currentUser();
 
   const opReq = await PointOpReq.findOne({
     where: {
@@ -100,7 +100,7 @@ module.exports.receive = async function(opt) {
   validators.denyEmptyResult(targetCard);
   
   // TODO: valueが数値かどうかの検証
-  targetCard.Point += Number(opReq.value) | 0;
+  targetCard.point += Number(opReq.value) | 0;
   await targetCard.save();
   return;
 }
