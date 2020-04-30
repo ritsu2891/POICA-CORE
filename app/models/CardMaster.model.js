@@ -13,7 +13,16 @@ class CardMaster extends Model {
         as: 'SlaveCards',
         foreignKey: 'masterID',
       }
-    }]
+    }],
+    belongsTo: [
+      {
+        model: 'User',
+        options: {
+          as: 'OwnerUser',
+          foreignKey: 'ownerUserId'
+        }
+      },
+    ]
   }
 }
 
@@ -21,7 +30,7 @@ CardMaster.init({
   style: {
     type: DataTypes.INET,
   },
-  ownerUser: {
+  ownerUserId: {
     type: DataTypes.BIGINT
   },
   showInList: {
