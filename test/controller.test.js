@@ -403,6 +403,7 @@ describe('point', () => {
 
       expect(opReq.operatorUserId).toBe(testUserId);
       expect(Number(opReq.value)).toBe(Number(opt.value));
+      expect(opReq.masterId).toBe(master.id);
 
       done();
     });

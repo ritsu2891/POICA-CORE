@@ -10,6 +10,9 @@ PointOpReq.init({
     type: DataTypes.UUID,
     defaultValue: Sequelize.UUIDV4,
   },
+  masterId: {
+    type: DataTypes.INET,
+  },
   operatorUserId: {
     type: DataTypes.INET,
   },

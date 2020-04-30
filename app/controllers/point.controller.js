@@ -63,6 +63,7 @@ module.exports.give = async function(opt) {
   } else if (opt.media == 'uuid') {
   
     const opReq = await PointOpReq.create({
+      masterId: targetCardMaster.id,
       operatorUserId: cu.id,
       opType: opt.opType,
       value: opt.value,
