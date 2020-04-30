@@ -19,8 +19,6 @@ module.exports.add = async function(rOpts) {
   const opts = filterObject(rOpts, ['style', 'showInList', 'regByURL']);
   const cu = await currentUser();
 
-  console.log(opts);
-
   await CardMaster.create({
     ownerUserId: cu.id,
     style: opts.style,
