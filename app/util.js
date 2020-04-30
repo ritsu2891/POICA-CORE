@@ -27,3 +27,20 @@ module.exports.currentUser = async function() {
     }
   });
 }
+
+module.exports.restApiRes = async function(req, res, processFn, formatFn) {
+  try {
+    const processRes = await processFn();
+    const resJson = {
+      'result': 'ok'
+    };
+    Object.assign(resJson, formatFn(processRes));
+    res.json(resJson);
+  } catch (e) {
+    const resJson = {
+      'result': 'error',
+      'type': e.message,
+    };
+    res.status(400).json(resJson);
+  }
+}
