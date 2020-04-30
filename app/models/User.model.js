@@ -7,7 +7,7 @@ class User extends Model {
       model: 'Card',
       options: {
         as: 'RegisteredCards', // 複数形限定! https://sequelize.org/master/class/lib/model.js~Model.html#static-method-hasMany
-        foreignKey: 'ownerUserID', // モデル両方に指定
+        foreignKey: 'ownerUserId', // モデル両方に指定
       }
     }]
   }

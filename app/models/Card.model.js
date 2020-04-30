@@ -8,7 +8,7 @@ class Card extends Model {
         model: 'User',
         options: {
           as: 'OwnerUser',
-          foreignKey: 'ownerUserID'
+          foreignKey: 'ownerUserId'
         }
       },
       {
