@@ -24,6 +24,15 @@ afterAll(() => {
 });
 
 describe('card', () => {
+  afterEach(async function(done) {
+    await Card.destroy({
+      where: {
+        ownerUserId: testUserId
+      }
+    });
+    done();
+  });
+
   test('list', done => {
     (async function () {
       var cards = await cardController.list();
@@ -41,4 +50,74 @@ describe('card', () => {
       done();
     })();
   });
+
+  describe('add', () => {
+    test('正常系: 通常公開のカードを追加', async function(done) {
+      var cards = await cardController.list();
+      expect(cards.length).toBe(0);
+      const master = await CardMaster.create({
+        ownerUser: testUserId+1,
+        showInList: true,
+        regByURL: true,
+      });
+      await cardController.add(master.id, '');
+      cards = await cardController.list();
+      expect(cards.length).toBe(1);
+      const card = cards[0];
+      expect(card.masterId).toBe(master.id);
+      expect(card.point).toBe(0);
+      done();
+    });
+
+    test('正常系: URL登録のみ有効のカードを追加', async function(done) {
+      var cards = await cardController.list();
+      expect(cards.length).toBe(0);
+      const master = await CardMaster.create({
+        ownerUser: testUserId+1,
+        showInList: true,
+        regByURL: true,
+      });
+      await cardController.add(master.id, master.regToken);
+      cards = await cardController.list();
+      expect(cards.length).toBe(1);
+      const card = cards[0];
+      expect(card.masterId).toBe(master.id);
+      expect(card.point).toBe(0);
+      done();
+    });
+
+    test('異常系: URL登録のみ有効のカードでトークンが異なる', async function(done) {
+      var cards = await cardController.list();
+      expect(cards.length).toBe(0);
+      const master = await CardMaster.create({
+        ownerUser: testUserId+1,
+        showInList: false,
+        regByURL: true,
+      });
+      try {
+        await cardController.add(master.id, '');
+        fail();
+      } catch (e) {
+        // OK
+      }
+      done();
+    });
+
+    test('異常系: ユーザによるカードの追加が拒否されているカードを追加 (リスト経由登録・URL登録が共に無効)', async function(done) {
+      var cards = await cardController.list();
+      expect(cards.length).toBe(0);
+      const master = await CardMaster.create({
+        ownerUser: testUserId+1,
+        showInList: false,
+        regByURL: false,
+      });
+      try {
+        await cardController.add(master.id, '');
+        fail();
+      } catch (e) {
+        // OK
+      }
+      done();
+    });
+  })
 });
