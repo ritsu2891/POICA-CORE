@@ -11,7 +11,7 @@ router.get('/list', (req, res) => {
 
 // ポイントカードマスタの新規作成
 router.post('/add', (req, res) => {
-  restApiRes(req, res, masterController.add(req.body, (r) => {return {}}));
+  restApiRes(req, res, () => {return masterController.add(req.body)}, (r) => {return {}});
 })
 
 module.exports = router;
