@@ -10,9 +10,11 @@ const CardMaster = models.CardMaster;
 // 自分が管理しているポイントカードマスタ一覧取得
 router.get('/list', (req, res) => {
   (async function () {
+    const cu = currentUser();
+
     const masters = await CardMaster.findAll({
       where: {
-        OwnerUser: currentUser.id
+        ownerUser: cu.id
       }
     });
     const resmasters = masters.map(m => ({
@@ -25,22 +27,15 @@ router.get('/list', (req, res) => {
 
 // ポイントカードマスタの新規作成
 router.post('/add', (req, res) => {
-  console.log(req.body);
-  const newMaster = CardMaster.create({
-    'Style': req.body.style,
-    'OwnerUser': 1, // DUMMY!
-    'ShowInList': req.body.showinlist,
-    'RegByURL': req.body.regbyurl,
+  const cu = currentUser();
+
+  await CardMaster.create({
+    style: req.body.style,
+    ownerUser: cu.id,
+    showInList: req.body.showinlist,
+    regByURL: req.body.regbyurl,
   });
   res.json({result: 'ok'});
 })
-
-function errRes(errtype, message) {
-  return {
-    'result': 'error',
-    'type': errtype,
-    'message': message
-  };
-}
 
 module.exports = router;
