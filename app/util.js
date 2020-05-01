@@ -20,14 +20,6 @@ module.exports.filterObject = function(obj, allowKey) {
   return resObj;
 }
 
-module.exports.currentUser = async function() {
-  return await User.findOne({
-    where: {
-      id: 1
-    }
-  });
-}
-
 module.exports.restApiRes = async function(req, res, processFn, formatFn) {
   try {
     const processRes = await processFn();

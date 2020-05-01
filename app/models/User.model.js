@@ -1,5 +1,6 @@
 const { Sequelize, DataTypes, Model } = require('sequelize');
 var sequelize = require("../../config/db.js");
+const randtoken = require('rand-token');
 
 class User extends Model {
   static associate = {
@@ -20,6 +21,15 @@ class User extends Model {
       }
     ]
   }
+
+  generateAccessToken() {
+    this.accessToken = randtoken.generate(50);
+  }
+
+  tieProviderId(providerName, providerId) {
+    console.log(providerId);
+    this[providerName + 'Id'] = providerId;
+  }
 }
 
 User.init({
@@ -28,6 +38,9 @@ User.init({
   },
   accessToken: {
     type: DataTypes.STRING
+  },
+  googleId: {
+    type: DataTypes.TEXT
   }
 }, {sequelize});
 
