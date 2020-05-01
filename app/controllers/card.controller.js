@@ -1,4 +1,5 @@
-const { filterObject, currentUser } = require('../util.js');
+const { filterObject } = require('../util.js');
+const { currentUser } = require('../auth.js');
 
 const models = require('../models');
 const Card = models.Card;
@@ -7,7 +8,7 @@ const validators = require('./validators.js');
 
 // ログイン中のユーザが持っているカードの一覧
 module.exports.list = async function() {
-  const cards = await (await currentUser()).getRegisteredCards();
+  const cards = await currentUser().getRegisteredCards();
   const rescards = cards.map((card) => {
     return filterObject(card.toJSON(), ['id', 'masterId', 'point']);
   });
@@ -30,5 +31,5 @@ module.exports.add = async function(masterId, token) {
     'masterId': master.id,
   });
 
-  newCard.setOwnerUser(await currentUser());
+  newCard.setOwnerUser(currentUser());
 }

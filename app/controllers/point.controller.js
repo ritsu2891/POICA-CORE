@@ -1,4 +1,5 @@
-const { isEmpty, currentUser } = require('../util.js');
+const { isEmpty } = require('../util.js');
+const { currentUser } = require('../auth.js');
 
 const models = require('../models');
 const Card = models.Card;
@@ -18,8 +19,6 @@ const validators = require('./validators.js');
 }
 */
 module.exports.give = async function(opt) {
-  const cu = await currentUser();
-
   let targetCard = undefined;
   let targetCardMaster = undefined;
 
@@ -50,7 +49,7 @@ module.exports.give = async function(opt) {
   validators.denyEmptyResult(targetCardMaster, 'MASTER');
 
   // ポイント付与権限を確認
-  await validators.checkPointGiveAuthority(targetCardMaster, cu.id, opt.as);
+  await validators.checkPointGiveAuthority(targetCardMaster, currentUser().id, opt.as);
 
   // ポイント付与・発行
   validators.denyNonNumerical(opt.value);
@@ -64,7 +63,7 @@ module.exports.give = async function(opt) {
   
     const opReq = await PointOpReq.create({
       masterId: targetCardMaster.id,
-      operatorUserId: cu.id,
+      operatorUserId: currentUser().id,
       opType: opt.opType,
       value: opt.value,
     });
@@ -82,8 +81,6 @@ module.exports.give = async function(opt) {
 }
 */
 module.exports.receive = async function(opt) {
-  const cu = await currentUser();
-
   const opReq = await PointOpReq.findOne({
     where: {
       token: opt.token,
@@ -94,7 +91,7 @@ module.exports.receive = async function(opt) {
   const targetCard = await Card.findOne({
     where: {
       id: opt.cardId,
-      ownerUserId: cu.id,
+      ownerUserId: currentUser().id,
     }
   });
   validators.denyEmptyResult(targetCard);
