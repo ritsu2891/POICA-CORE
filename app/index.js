@@ -40,10 +40,10 @@ if (app.get('env') != 'test') {
       res.cookie('accessToken', req.user.accessToken, {
         httpOnly: false
       });
-      res.cookie('test', 120, {
+      res.cookie('authResult', 'ok', {
         httpOnly: false
       });
-      res.json({status: 'ok', token: req.user.accessToken});
+      res.json({});
     }
   );
 
