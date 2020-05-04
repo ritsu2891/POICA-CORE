@@ -29,6 +29,7 @@ if (app.get('env') != 'test') {
   app.use('/cards', require('./api/card.js'));
   app.use('/cardmasters', require('./api/cardmaster.js'));
   app.use('/points', require('./api/point.js'));
+  app.use('/users', require('./api/user.js'));
 
   // http://localhost:4000/auth/google
   app.get('/auth/google', 
