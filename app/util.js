@@ -20,6 +20,7 @@ module.exports.filterObject = function(obj, allowKey) {
   return resObj;
 }
 
+// TODO:ちゃんと自分で定義したErrorのみメッセージを返すようにしないと、任意のエラーが外部にもれて攻撃につながる恐れがある。 
 module.exports.restApiRes = async function(req, res, processFn, formatFn) {
   try {
     const processRes = await processFn();
