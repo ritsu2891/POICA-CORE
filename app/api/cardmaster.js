@@ -14,4 +14,11 @@ router.post('/add', authorize, (req, res) => {
   restApiRes(req, res, () => {return masterController.add(req.body)}, (r) => {return {}});
 })
 
+// 登録用UUIDからのマスタ検索
+router.get('/byRegToken', (req, res) => {
+  restApiRes(req, res, () => {
+    return masterController.findByRegToken(req.query.regToken)
+  }, (r) => {return {master: r};});
+});
+
 module.exports = router;

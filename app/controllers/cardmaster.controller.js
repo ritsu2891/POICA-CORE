@@ -10,7 +10,7 @@ const validators = require('./validators.js');
 module.exports.list = async function() {
   const masters = await currentUser().getOwnedMasters();
   const resmasters = masters.map((master) => {
-    return filterObject(master.toJSON(), ['id', 'style', 'showInList', 'regByURL', 'regToken']);
+    return filterMaster(master);
   });
   return resmasters;
 }
@@ -25,4 +25,19 @@ module.exports.add = async function(rOpts) {
     showInList: opts.showInList,
     regByURL: opts.regByURL,
   });
+}
+
+// 登録用UUIDからのマスタ検索
+module.exports.findByRegToken = async function(regToken) {
+  const master = await CardMaster.findOne({
+    where: {
+      regToken: regToken
+    }
+  });
+  validators.denyEmptyResult(master);
+  return filterMaster(master);
+}
+
+function filterMaster(master) {
+  return filterObject(master.toJSON(), ['id', 'style', 'showInList', 'regByURL', 'regToken']);
 }
