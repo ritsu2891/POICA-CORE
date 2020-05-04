@@ -9,7 +9,7 @@ router.get('/list', authorize, (req, res) => {
 });
 
 router.post('/add', authorize, (req, res) => {
-  restApiRes(req, res, cardController.add(req.body.masterid), (r) => {return {};});
+  restApiRes(req, res, () => cardController.add(req.body.id, req.body.token), (r) => {return {};});
 });
 
 module.exports = router;
