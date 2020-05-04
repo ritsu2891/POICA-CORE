@@ -1,3 +1,5 @@
+const { Op } = require("sequelize");
+
 const { filterObject } = require('../util.js');
 const { currentUser } = require('../auth.js');
 
@@ -40,4 +42,20 @@ module.exports.findByRegToken = async function(regToken) {
 
 function filterMaster(master) {
   return filterObject(master.toJSON(), ['id', 'style', 'showInList', 'regByURL', 'regToken']);
+}
+
+// 管理者として操作可能なカードを特定のユーザについて取得
+module.exports.underControllCardOfUser = async function(userId) {
+  const masters = await currentUser().getOwnedMasters();
+  const cards = await Card.findAll({
+    where: {
+      [Op.and]: [
+        { ownerUserId: userId },
+        { masterId: {
+          [Op.or]: masters.map(m => m.id),
+        }}
+      ]
+    }
+  });
+  return cards;
 }
