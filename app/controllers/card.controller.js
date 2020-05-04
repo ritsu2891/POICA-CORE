@@ -16,10 +16,10 @@ module.exports.list = async function() {
 }
 
 // ログイン中のユーザ名義のカードを追加
-module.exports.add = async function(masterId, token) {
+module.exports.add = async function(id, token) {
   const master = await CardMaster.findOne({
     where: {
-      ID: masterId
+      id: id
     }
   });
 
