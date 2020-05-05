@@ -1,0 +1,17 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>処理中...</title>
+  </head>
+  <body>
+    <script>
+      const targetWindow = window.opener;
+      if (targetWindow) {
+        targetWindow.postMessage("{{accessToken}}", '*');
+        window.close();
+      } else {
+        window.close();
+      }
+    </script>
+  </body>
+</html>

@@ -6,10 +6,15 @@ require('dotenv').config({
   path: 'config/environment/.env.' + app.get('env')
 });
 const passport = require('./auth.js').passport;
+var mustacheExpress = require('mustache-express');
 
 process.env.TZ = 'Asia/Japan';
 
 if (app.get('env') != 'test') {
+  app.engine('mustache', mustacheExpress());
+  app.set('view engine', 'mustache');
+  app.set('views', __dirname + '/views');
+
   var cors = require("../config/middlewares/cors.js");
   app.use(cors);
 
@@ -31,20 +36,21 @@ if (app.get('env') != 'test') {
   app.use('/points', require('./api/point.js'));
   app.use('/users', require('./api/user.js'));
 
-  // http://localhost:4000/auth/google
+  // http://rpakambp.local:4000/auth/google
   app.get('/auth/google', 
     passport.authenticate('google', { scope: ['profile'], session: false }),
   );
   app.get('/auth/google/done',
     passport.authenticate('google', { session: false }),
     function(req, res) {
-      res.cookie('accessToken', req.user.accessToken, {
-        httpOnly: false
-      });
-      res.cookie('authResult', 'ok', {
-        httpOnly: false
-      });
-      res.json({});
+      // res.cookie('accessToken', req.user.accessToken, {
+      //   httpOnly: false
+      // });
+      // res.cookie('authResult', 'ok', {
+      //   httpOnly: false
+      // });
+      // res.json({});
+      res.render('sendToken', {accessToken: req.user.accessToken});
     }
   );
 
