@@ -32,6 +32,9 @@ Card.init({
   point: {
     type: DataTypes.INET
   },
+  description: {
+    type: DataTypes.TEXT
+  },
 }, {sequelize});
 
 module.exports = Card;

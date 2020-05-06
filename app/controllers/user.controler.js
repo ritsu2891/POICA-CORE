@@ -13,5 +13,5 @@ module.exports.searchByDisplayName = async function(displayName) {
       },
     }
   });
-  return users.map(user => filterObject(user, ['id', 'displayName']));
+  return users.map(user => user.toJSON());
 }

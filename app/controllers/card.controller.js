@@ -10,7 +10,7 @@ const validators = require('./validators.js');
 module.exports.list = async function() {
   const cards = await currentUser().getRegisteredCards();
   const rescards = cards.map((card) => {
-    return filterObject(card.toJSON(), ['id', 'masterId', 'point']);
+    return card.toJSON();
   });
   return rescards;
 }

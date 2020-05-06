@@ -12,21 +12,22 @@ const validators = require('./validators.js');
 module.exports.list = async function() {
   const masters = await currentUser().getOwnedMasters();
   const resmasters = masters.map((master) => {
-    return filterMaster(master);
+    return master.toJSON();
   });
   return resmasters;
 }
 
 // ログイン中のユーザ管理のカードマスタを追加
 module.exports.add = async function(rOpts) {
-  const opts = filterObject(rOpts, ['style', 'showInList', 'regByURL']);
-
-  await CardMaster.create({
+  const opts = filterObject(rOpts, 
+    ['style', 'showInList', 'regByURL', 'userToUserPointOpt',
+    'displayName', 'logoUrl', 'primaryColor', 'backgroundColor', 'textColor']
+  );
+  opts = Object.assign(opts, {
     ownerUserId: currentUser().id,
-    style: opts.style,
-    showInList: opts.showInList,
-    regByURL: opts.regByURL,
   });
+
+  await CardMaster.create(opts);
 }
 
 // 登録用UUIDからのマスタ検索
@@ -37,11 +38,7 @@ module.exports.findByRegToken = async function(regToken) {
     }
   });
   validators.denyEmptyResult(master);
-  return filterMaster(master);
-}
-
-function filterMaster(master) {
-  return filterObject(master.toJSON(), ['id', 'style', 'showInList', 'regByURL', 'regToken']);
+  return master.toJSON();
 }
 
 // 管理者として操作可能なカードを特定のユーザについて取得

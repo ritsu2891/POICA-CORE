@@ -28,7 +28,7 @@ class CardMaster extends Model {
 
 CardMaster.init({
   style: {
-    type: DataTypes.INET,
+    type: DataTypes.TEXT,
   },
   ownerUserId: {
     type: DataTypes.BIGINT
@@ -45,7 +45,23 @@ CardMaster.init({
   },
   userToUserPointOpt: {
     type: DataTypes.BOOLEAN,
-  }
+  },
+  // 5/6追加：リッチな表現第一弾
+  displayName: {
+    type: DataTypes.TEXT
+  },
+  logoUrl: {
+    type: DataTypes.TEXT
+  },
+  primaryColor: {
+    type: DataTypes.STRING
+  },
+  backgroundColor: {
+    type: DataTypes.STRING
+  },
+  textColor: {
+    type: DataTypes.STRING
+  },
 }, {sequelize});
 
 module.exports = CardMaster;

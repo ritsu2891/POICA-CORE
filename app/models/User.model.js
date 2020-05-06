@@ -41,7 +41,10 @@ User.init({
   },
   googleId: {
     type: DataTypes.TEXT
-  }
+  },
+  iconUrl: {
+    type: DataTypes.TEXT
+  },
 }, {sequelize});
 
 module.exports = User;
