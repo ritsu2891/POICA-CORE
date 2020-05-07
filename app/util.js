@@ -15,7 +15,9 @@ module.exports.isEmpty = function(val) {
 module.exports.filterObject = function(obj, allowKey) {
   resObj = {};
   Object.values(allowKey).forEach((key) => {
-    resObj[key] = obj[key];
+    if (obj[key]) {
+      resObj[key] = obj[key];
+    }
   });
   return resObj;
 }

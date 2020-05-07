@@ -19,9 +19,9 @@ module.exports.list = async function() {
 
 // ログイン中のユーザ管理のカードマスタを追加
 module.exports.add = async function(rOpts) {
-  const opts = filterObject(rOpts, 
+  let opts = filterObject(rOpts, 
     ['style', 'showInList', 'regByURL', 'userToUserPointOpt',
-    'displayName', 'logoUrl', 'primaryColor', 'backgroundColor', 'textColor']
+    'displayName', 'primaryColor', 'backgroundColor', 'textColor', 'logo']
   );
   opts = Object.assign(opts, {
     ownerUserId: currentUser().id,
@@ -37,6 +37,7 @@ module.exports.findByRegToken = async function(regToken) {
       regToken: regToken
     }
   });
+  console.log(master.logoUrl);
   validators.denyEmptyResult(master);
   return master.toJSON();
 }

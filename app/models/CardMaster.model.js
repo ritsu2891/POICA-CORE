@@ -50,8 +50,14 @@ CardMaster.init({
   displayName: {
     type: DataTypes.TEXT
   },
-  logoUrl: {
+  logo: {
     type: DataTypes.TEXT
+  },
+  logoUrl: {
+    type: DataTypes.VIRTUAL(DataTypes.TEXT, ['logo']),
+    get() {
+      return `${process.env.SELF_URL}/uploads/master/logo/${this.get('logo')}`
+    }
   },
   primaryColor: {
     type: DataTypes.STRING

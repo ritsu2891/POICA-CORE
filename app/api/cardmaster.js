@@ -1,5 +1,7 @@
 var express = require("express");
 const router = express.Router();
+const multer  = require('multer');
+const randtoken = require('rand-token');
 const { isEmpty, filterObject, currentUser, restApiRes } = require('../util.js');
 const authorize = require('../../config/middlewares/auth.js');
 const masterController = require('../controllers/cardmaster.controller.js');
@@ -11,9 +13,73 @@ router.get('/list', authorize, (req, res) => {
 });
 
 // ポイントカードマスタの新規作成
-router.post('/add', authorize, (req, res) => {
-  restApiRes(req, res, () => {return masterController.add(req.body)}, (r) => {return {}});
-})
+const iconUpload = multer({
+  limits: {
+    fieldNameSize: 10,
+    fileSize: 2e9, //2G Byte
+    files: 1,
+  },
+  fileFilter: (req, file, cb) => {
+    console.log('fileFilter()');
+    const acceptFileExt = ['jpg', 'jpeg', 'png', 'svg'];
+    const acceptMimetype = ['image/jpg', 'image/jpeg', 'image/png', 'image/xml+svg'];
+    const fileExtRegRes = (new RegExp("\\.(.*)$")).exec(file.originalname);
+    const fileExt = fileExtRegRes ? fileExtRegRes[1] : null;
+    if (fileExt === null || !acceptFileExt.includes(fileExt)) {
+      // 拡張子がファイル名に入っていないか、サポート対象外のもの
+      cb(new Error('UNSUPPORTED_EXTENSION'));
+      return;
+    }
+    const mimeType = acceptMimetype[acceptFileExt.indexOf(fileExt)];
+    if (mimeType != file.mimetype) {
+      // MimeTypeがサポート対象外のもの
+      cb(new Error('UNSUPPORTED_MIME_TYPE'));
+      return;
+    }
+    console.log('fileFilter() Accept');
+    cb(null, true);
+  },
+  storage: multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, 'uploads/master/logo')
+    },
+    filename: function (req, file, cb) {
+      const fileExtRegRes = (new RegExp("\\.(.*)$")).exec(file.originalname);
+      const fileExt = fileExtRegRes ? '.'+fileExtRegRes[1] : '';
+      cb(null, `${randtoken.generate(50)}${fileExt}`);
+    }
+  }),
+}).single('logo');
+
+router.post(
+  '/add',
+  authorize,
+  (req, res) => {
+    restApiRes(
+      req, res,
+      async function() {
+        const pIconUpload = () => new Promise((resoleve, reject) => {
+          iconUpload(req, res, function (err) {
+            resoleve(err);
+          });
+        });
+        const upErr = await pIconUpload();
+        if (upErr) {
+          throw new Error(upErr.message);
+        }
+
+        const opts = req.body;
+        if (req.file) {
+          Object.assign(opts, {
+            logo: req.file.filename,
+          });
+        }
+        return masterController.add(opts);
+      },
+      (r) => {return {}}
+    );
+  }
+);
 
 // 登録用UUIDからのマスタ検索
 router.get('/byRegToken', (req, res) => {

@@ -1,3 +1,4 @@
+const path = require('path');
 var express = require("express");
 var session = require("express-session");
 var cookieParser = require('cookie-parser');
@@ -30,6 +31,9 @@ if (app.get('env') != 'test') {
 
   app.use(passport.initialize());
   app.use(passport.session());
+
+  console.log(path.resolve(__dirname + "/../uploads"));
+  app.use('/uploads', express.static(path.resolve(__dirname + "/../uploads")));
 
   app.use('/cards', require('./api/card.js'));
   app.use('/cardmasters', require('./api/cardmaster.js'));
