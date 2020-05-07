@@ -24,7 +24,11 @@ passport.use(new GoogleStrategy(
       let loginUser = null;
       loginUser = await login(providerName, profile.id);
       if (!loginUser) {
-        loginUser = await register(providerName, profile.id, profile.displayName);
+        let iconUrl = null;
+        if (profile.photos && Array.isArray(profile.photos) && profile.photos.length > 0 && profile.photos[0]) {
+          iconUrl = profile.photos[0].value;
+        }
+        loginUser = await register(providerName, profile.id, profile.displayName, iconUrl);
       }
       done(null, loginUser);
     })();
@@ -49,12 +53,13 @@ async function login(providerName, providerId) {
   }
 }
 
-async function register(providerName, providerId, tmpName) {
+async function register(providerName, providerId, tmpName, iconUrl) {
   if (!allowProviderNames.includes(providerName)) {
     throw new Error('INVALID_PROVIDER');
   }
   const newUser = await User.create({
     displayName: tmpName,
+    iconUrl: iconUrl,
   });
   newUser.generateAccessToken();
   newUser.tieProviderId(providerName, providerId);
