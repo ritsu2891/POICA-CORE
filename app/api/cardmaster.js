@@ -15,14 +15,14 @@ router.get('/list', authorize, (req, res) => {
 // ポイントカードマスタの新規作成
 const iconUpload = multer({
   limits: {
-    fieldNameSize: 10,
+    fieldNameSize: 20,
     fileSize: 2e9, //2G Byte
     files: 1,
   },
   fileFilter: (req, file, cb) => {
     console.log('fileFilter()');
     const acceptFileExt = ['jpg', 'jpeg', 'png', 'svg'];
-    const acceptMimetype = ['image/jpg', 'image/jpeg', 'image/png', 'image/xml+svg'];
+    const acceptMimetype = ['image/jpg', 'image/jpeg', 'image/png', 'image/svg+xml'];
     const fileExtRegRes = (new RegExp("\\.(.*)$")).exec(file.originalname);
     const fileExt = fileExtRegRes ? fileExtRegRes[1] : null;
     if (fileExt === null || !acceptFileExt.includes(fileExt)) {

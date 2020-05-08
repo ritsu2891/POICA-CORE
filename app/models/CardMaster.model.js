@@ -59,6 +59,9 @@ CardMaster.init({
       return `${process.env.SELF_URL}/uploads/master/logo/${this.get('logo')}`
     }
   },
+  logoType: {
+    type: DataTypes.TEXT
+  },
   primaryColor: {
     type: DataTypes.STRING
   },

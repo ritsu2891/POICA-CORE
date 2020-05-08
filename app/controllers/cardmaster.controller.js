@@ -21,7 +21,7 @@ module.exports.list = async function() {
 module.exports.add = async function(rOpts) {
   let opts = filterObject(rOpts, 
     ['style', 'showInList', 'regByURL', 'userToUserPointOpt',
-    'displayName', 'primaryColor', 'backgroundColor', 'textColor', 'logo']
+    'displayName', 'primaryColor', 'backgroundColor', 'textColor', 'logo', 'logoType']
   );
   opts = Object.assign(opts, {
     ownerUserId: currentUser().id,
