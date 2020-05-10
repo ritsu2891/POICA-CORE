@@ -81,6 +81,13 @@ router.post(
   }
 );
 
+// IDからのマスタ検索
+router.get('/byId', (req, res) => {
+  restApiRes(req, res, () => {
+    return masterController.findById(req.query.id);
+  }, (r) => {return {master: r};});
+});
+
 // 登録用UUIDからのマスタ検索
 router.get('/byRegToken', (req, res) => {
   restApiRes(req, res, () => {

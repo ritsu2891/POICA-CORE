@@ -30,6 +30,17 @@ module.exports.add = async function(rOpts) {
   await CardMaster.create(opts);
 }
 
+// IDからのマスタ検索
+module.exports.findById = async function(id) {
+  const master = await CardMaster.findOne({
+    where: {
+      id: id
+    }
+  });
+  validators.denyEmptyResult(master, 'MASTER');
+  return master.toJSON();
+}
+
 // 登録用UUIDからのマスタ検索
 module.exports.findByRegToken = async function(regToken) {
   const master = await CardMaster.findOne({
