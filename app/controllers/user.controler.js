@@ -1,3 +1,5 @@
+const _ = require('lodash');
+
 const models = require('../models');
 const User = models.User;
 
@@ -17,5 +19,5 @@ module.exports.searchByDisplayName = async function(displayName) {
       },
     }
   });
-  return users.map(user => user.toJSON());
+  return users.map(user => _.omit(user.toJSON(), ['accessToken', 'googleId']));
 }

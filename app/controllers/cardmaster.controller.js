@@ -40,7 +40,7 @@ module.exports.findById = async function(id) {
     }
   });
   validators.denyEmptyResult(master, 'MASTER');
-  return master.toJSON();
+  return _.omit(master.toJSON(), ['regToken']);
 }
 
 // 登録用UUIDからのマスタ検索
