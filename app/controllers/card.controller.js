@@ -1,4 +1,3 @@
-const { filterObject } = require('../util.js');
 const { currentUser } = require('../auth.js');
 
 const models = require('../models');

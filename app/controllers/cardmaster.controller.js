@@ -1,6 +1,7 @@
+const _ = require('lodash');
+
 const { Op } = require("sequelize");
 
-const { filterObject } = require('../util.js');
 const { currentUser } = require('../auth.js');
 
 const models = require('../models');
@@ -19,7 +20,8 @@ module.exports.list = async function() {
 
 // ログイン中のユーザ管理のカードマスタを追加
 module.exports.add = async function(rOpts) {
-  let opts = filterObject(rOpts, 
+  let opts = _.pick(
+    rOpts, 
     ['style', 'showInList', 'regByURL', 'userToUserPointOpt',
     'displayName', 'primaryColor', 'backgroundColor', 'textColor', 'logo', 'logoType']
   );

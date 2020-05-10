@@ -12,15 +12,9 @@ module.exports.isEmpty = function(val) {
   return false; // 値は空ではない
 }
 
-module.exports.filterObject = function(obj, allowKey) {
-  resObj = {};
-  Object.values(allowKey).forEach((key) => {
-    if (obj[key]) {
-      resObj[key] = obj[key];
-    }
-  });
-  return resObj;
-}
+// module.exports.filterObject : 削除, 以下で代替
+// _.pick
+// _.omit
 
 // TODO:ちゃんと自分で定義したErrorのみメッセージを返すようにしないと、任意のエラーが外部にもれて攻撃につながる恐れがある。 
 module.exports.restApiRes = async function(req, res, processFn, formatFn) {
