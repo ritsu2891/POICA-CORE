@@ -8,6 +8,7 @@ require('dotenv').config({
 });
 const passport = require('./auth.js').passport;
 var mustacheExpress = require('mustache-express');
+const util = require('./util.js');
 
 process.env.TZ = 'Asia/Japan';
 
@@ -57,6 +58,11 @@ if (app.get('env') != 'test') {
       res.render('sendToken', {accessToken: req.user.accessToken});
     }
   );
+
+  //テスト用
+  app.get('/test', async (req, res) => {
+    res.json({});
+  });
 
   var server = app.listen(4000, function () {
     var host = server.address().address;

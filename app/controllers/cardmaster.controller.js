@@ -3,6 +3,7 @@ const _ = require('lodash');
 const { Op } = require("sequelize");
 
 const { currentUser } = require('../auth.js');
+const util = require('../util.js');
 
 const models = require('../models');
 const Card = models.Card;
@@ -29,7 +30,8 @@ module.exports.add = async function(rOpts) {
     ownerUserId: currentUser().id,
   });
 
-  await CardMaster.create(opts);
+  const master = await CardMaster.create(opts);
+  await util.genCardImage(master.regToken);
 }
 
 // IDからのマスタ検索
