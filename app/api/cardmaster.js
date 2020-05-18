@@ -30,8 +30,7 @@ const iconUpload = multer({
       cb(new Error('UNSUPPORTED_EXTENSION'));
       return;
     }
-    const mimeType = acceptMimetype[acceptFileExt.indexOf(fileExt)];
-    if (mimeType != file.mimetype) {
+    if (!acceptMimetype.includes(file.mimetype)) {
       // MimeTypeがサポート対象外のもの
       cb(new Error('UNSUPPORTED_MIME_TYPE'));
       return;
