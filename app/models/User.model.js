@@ -35,9 +35,16 @@ class User extends Model {
 User.init({
   userId: {
     type: DataTypes.TEXT,
+    validate: {
+      is: /^\w+$/,
+      len: [0, 30]
+    },
   },
   displayName: {
     type: DataTypes.STRING,
+    validate: {
+      len: [0, 30]
+    },
   },
   accessToken: {
     type: DataTypes.STRING

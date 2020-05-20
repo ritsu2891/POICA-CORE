@@ -32,10 +32,13 @@ module.exports.updateMyProfile = async function(profile) {
     if (profile.displayName) {
       cUser.displayName = profile.displayName;
     }
+    await cUser.save();
   } catch (e) {
+    if (e.errors && e.errors.length > 0 && e.errors[0].type == 'Validation error') {
+      throw new Error('WRONG_INPUT');
+    }
     throw new Error('SOMETHING_WRONG');
   }
-  cUser.save();
 }
 
 module.exports.myProfile = async function() {
