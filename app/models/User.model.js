@@ -33,6 +33,9 @@ class User extends Model {
 }
 
 User.init({
+  userId: {
+    type: DataTypes.TEXT,
+  },
   displayName: {
     type: DataTypes.STRING,
   },
