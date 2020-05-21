@@ -60,6 +60,7 @@ async function register(providerName, providerId, tmpName, iconUrl) {
   const newUser = await User.create({
     displayName: tmpName,
     iconUrl: iconUrl,
+    init: true
   });
   newUser.generateAccessToken();
   newUser.tieProviderId(providerName, providerId);

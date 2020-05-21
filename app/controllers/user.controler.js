@@ -33,6 +33,9 @@ module.exports.updateMyProfile = async function(profile) {
     if (profile.displayName) {
       cUser.displayName = profile.displayName;
     }
+    if (profile.userId) {
+      cUser.init = false;
+    }
     await cUser.save();
   } catch (e) {
     if (e.errors && e.errors.length > 0 && e.errors[0].type == 'Validation error') {

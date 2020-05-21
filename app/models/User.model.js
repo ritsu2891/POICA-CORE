@@ -55,6 +55,9 @@ User.init({
   iconUrl: {
     type: DataTypes.TEXT
   },
+  init: {
+    type: DataTypes.BOOLEAN
+  }
 }, {sequelize});
 
 module.exports = User;
