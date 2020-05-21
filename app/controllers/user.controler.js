@@ -11,6 +11,7 @@ module.exports.checkIdDupl = async function(opt) {
   if (!opt) {
     throw new Error('EMPTY_INPUT');
   }
+  if (currentUser() && opt.userId == currentUser().userId) return false;
   const duplUser = await User.findOne({
     where: {
       userId: opt.userId,

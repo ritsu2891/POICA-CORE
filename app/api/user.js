@@ -9,7 +9,7 @@ const validators = require('../controllers/validators.js');
 const userController = require('../controllers/user.controler.js');
 
 // IDの重複を確認
-router.post('/checkIdDupl', (req, res) => {
+router.post('/checkIdDupl', authorize, (req, res) => {
   restApiRes(req, res, () => userController.checkIdDupl(req.body), r => ({duplicate: r}));
 });
 
