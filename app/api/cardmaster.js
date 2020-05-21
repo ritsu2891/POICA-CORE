@@ -80,6 +80,11 @@ router.post(
   }
 );
 
+// 削除
+router.post('/remove', authorize, (req, res) => {
+  restApiRes(req, res, () => masterController.remove(req.body.masterId), () => ({}));
+})
+
 // IDからのマスタ検索
 router.get('/byId', (req, res) => {
   restApiRes(req, res, () => {

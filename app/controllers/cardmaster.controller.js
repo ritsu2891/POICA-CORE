@@ -34,6 +34,22 @@ module.exports.add = async function(rOpts) {
   await util.genCardImage(master.regToken);
 }
 
+// 削除
+module.exports.remove = async function(masterId) {
+  const master = await CardMaster.findOne({
+    where: {
+      id: masterId,
+      ownerUserId: currentUser().id,
+    }
+  });
+  validators.denyEmptyResult(master, 'MASTER');
+  const cards = await master.getSlaveCards();
+  await Promise.all(
+    cards.map(card => card.destroy())
+  );
+  await master.destroy();
+}
+
 // IDからのマスタ検索
 module.exports.findById = async function(id) {
   const master = await CardMaster.findOne({

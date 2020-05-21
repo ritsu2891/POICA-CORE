@@ -12,4 +12,8 @@ router.post('/add', authorize, (req, res) => {
   restApiRes(req, res, () => cardController.add(req.body.id, req.body.token), (r) => {return {};});
 });
 
+router.post('/remove', authorize, (req, res) => {
+  restApiRes(req, res, () => cardController.remove(req.body.cardId), () => ({}));
+})
+
 module.exports = router;

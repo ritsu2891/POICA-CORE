@@ -32,3 +32,15 @@ module.exports.add = async function(id, token) {
 
   newCard.setOwnerUser(currentUser());
 }
+
+// カードを削除
+module.exports.remove = async function(cardId) {
+  const card = await Card.findOne({
+    where: {
+      id: cardId,
+      ownerUserId: currentUser().id,
+    }
+  });
+  validators.denyEmptyResult(card, 'CARD');
+  await card.destroy();
+}
