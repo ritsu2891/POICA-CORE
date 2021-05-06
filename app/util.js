@@ -55,7 +55,8 @@ async function preparePageInstance() {
         defaultViewport: {
           width: 1200,
           height: 630
-        }
+        },
+	args: ['--no-sandbox', '--disable-setuid-sandbox']
       });
       process.on('SIGINT', function() {
         if (browser) {
