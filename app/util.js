@@ -48,10 +48,10 @@ async function preparePageInstance() {
   await browserLock.acquire('getPageInstance', async (done) => {
     if (!browser) {
       browser = await puppeteer.launch({
-        headless: false,
+        headless: true,
         ignoreHTTPSErrors: false,
         executablePath: process.env.BROWSER_EXECUTABLE,
-        slowMo: 200,
+        //slowMo: 200,
         defaultViewport: {
           width: 1200,
           height: 630
@@ -74,8 +74,9 @@ async function preparePageInstance() {
 module.exports.genCardImage = async function (masterRegToken) {
   await browserLock.acquire('genCardImage', async (done) => {
     await preparePageInstance();
-    await page.goto(`${process.env.WEB_APP_URL}/gen/master/${masterRegToken}`);
-    await page.waitFor('.card');
+    await page.goto(`${process.env.WEB_APP_URL}/gen/master/${masterRegToken}`),
+    await page.waitFor('.card')
+    await page.waitFor(3000);
     await page.screenshot({
       path: path.resolve(process.env.UPLOAD_PATH, `master/cardimage/${masterRegToken}.jpeg`)
     });

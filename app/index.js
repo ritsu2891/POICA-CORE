@@ -49,6 +49,7 @@ if (app.get('env') != 'test') {
   app.get('/auth/google/done',
     passport.authenticate('google', { session: false }),
     function(req, res) {
+      console.log(req.query);
       // res.cookie('accessToken', req.user.accessToken, {
       //   httpOnly: false
       // });
@@ -56,6 +57,7 @@ if (app.get('env') != 'test') {
       //   httpOnly: false
       // });
       // res.json({});
+ 
       res.render('sendToken', {accessToken: req.user.accessToken});
     }
   );

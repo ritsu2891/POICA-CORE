@@ -16,9 +16,10 @@ passport.use(new GoogleStrategy(
   {
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: `http://${process.env.SELF_FQDN}/auth/google/done`
+    callbackURL: `${process.env.SELF_URL}/auth/google/done`
   },
   function(accessToken, refreshToken, profile, done) {
+    console.log('profile');
     (async function () {
       const providerName = 'google';
       let loginUser = null;
