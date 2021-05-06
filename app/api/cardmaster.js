@@ -1,3 +1,4 @@
+const path = require('path');
 var express = require("express");
 const router = express.Router();
 const multer  = require('multer');
@@ -40,7 +41,7 @@ const iconUpload = multer({
   },
   storage: multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, 'uploads/master/logo')
+      cb(null, path.resolve(process.env.UPLOAD_PATH, 'master/logo'))
     },
     filename: function (req, file, cb) {
       const fileExtRegRes = (new RegExp("\\.(.*)$")).exec(file.originalname);
@@ -59,6 +60,7 @@ router.post(
       async function() {
         const pIconUpload = () => new Promise((resoleve, reject) => {
           iconUpload(req, res, function (err) {
+            console.log(err);
             resoleve(err);
           });
         });

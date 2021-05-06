@@ -3,8 +3,9 @@ var express = require("express");
 var session = require("express-session");
 var cookieParser = require('cookie-parser');
 var app = express();
+console.log(`Run with ${app.get('env')} environment.`);
 require('dotenv').config({
-  path: 'config/environment/.env.' + app.get('env')
+  path: 'config/.env.' + app.get('env')
 });
 const passport = require('./auth.js').passport;
 var mustacheExpress = require('mustache-express');
@@ -34,7 +35,7 @@ if (app.get('env') != 'test') {
   app.use(passport.session());
 
   console.log(path.resolve(__dirname + "/../uploads"));
-  app.use('/uploads', express.static(path.resolve(__dirname + "/../uploads")));
+  app.use('/uploads', express.static(process.env.UPLOAD_PATH));
 
   app.use('/cards', require('./api/card.js'));
   app.use('/cardmasters', require('./api/cardmaster.js'));
