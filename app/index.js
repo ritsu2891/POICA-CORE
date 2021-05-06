@@ -5,7 +5,7 @@ var cookieParser = require('cookie-parser');
 var app = express();
 console.log(`Run with ${app.get('env')} environment.`);
 require('dotenv').config({
-  path: 'config/.env.' + app.get('env')
+  path: path.resolve(__dirname, '../config/.env.' + app.get('env'))
 });
 const passport = require('./auth.js').passport;
 var mustacheExpress = require('mustache-express');
