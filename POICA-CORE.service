@@ -4,7 +4,7 @@ After=network-online.target
 
 [Service]
 Type=simple
-ExecStart=node /home/ubuntu/paka-apps/POICA-CORE/app/index.js
+ExecStart=zsh /home/ubuntu/paka-apps/POICA-CORE/run.sh
 Restart=on-failure
 
 [Install]
