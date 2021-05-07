@@ -10,7 +10,7 @@
 ![動作イメージ](https://cdn.rpaka.dev/useimage/poica/0_top.png)
 
 <div align="center" style="vertical-align: center;">
-<a href="">POICA-WEB(フロントエンド)</a> | <b >POICA-CORE(バックエンド)</b>
+<a href="https://github.com/ritsu2891/POICA-WEB">POICA-WEB(フロントエンド)</a> | <b>POICA-CORE(バックエンド)</b>
 </div>
 
 <div align="center" style="vertical-align: center;">
@@ -28,7 +28,7 @@ PayPayやLINEペイ等のQRコード決済の登場によって電子決済が�
 
 上記のような考えの基、お店のような商業的な利用でなくとも、感謝や頑張りなどに感じた「価値」を目に見える形、すなわち「ポイント」で共有できれば･･･と思い、個人レベルでも簡単に利用できる電子ポイントカードサービスを作成したという次第であります。お金のような広範囲にはならずとも狭い範囲での経済圏ができるかもしれませんね。
 
-**※POICAの機能はPOICA-WEBのREADMEで主に紹介します**
+**※POICAの機能は[POICA-WEB](https://github.com/ritsu2891/POICA-WEB)のREADMEで主に紹介します**
 
 # 利用
 
@@ -162,4 +162,4 @@ HTTPリクエストヘッダ内の `X-POICA-Access-Token` を照合してログ�
 - ユーザ送信データの検証が不足している。
 
 # 自己評価・感想
-ひとまずの作成なので、ポイントがただ増減するだけのポイントカードしか表現できていないが、カスタマイズ可能なポイントカードを作成して簡単に共有できるという自分の考えの一番コアな部分は実装できていると思う。
+ひとまずの作成なので、ポイントがただ増減するだけのポイントカードしか表現できていないですが、カスタマイズ可能なポイントカードを作成して簡単に共有できるという自分の考えの一番コアな部分は実装できていると思います。
