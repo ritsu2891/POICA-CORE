@@ -1,8 +1,8 @@
 <div align="center" style="vertical-align: center;">
   <img src="https://cdn.rpaka.dev/icon/poica.png" height="80px" />
-  <h1>POICA-WEB</h1>
+  <h1>POICA-CORE</h1>
   <h1>電子ポイントカード作成サービス</h1>
-  <h2>フロントエンド</h2><br / >
+  <h2>バックエンド</h2><br / >
   <img src="https://cdn.rpaka.dev/logo/nodejs.svg" height="80px" style="padding-right: 15px;" />
   <img src="https://cdn.rpaka.dev/logo/mysql.svg" height="80px" style="padding-right: 15px;" />
   <img src="https://cdn.rpaka.dev/logo/puppeteer.svg" height="80px" style="padding-right: 15px;" />
