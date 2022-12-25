@@ -16,7 +16,7 @@
 </div>
 
 <div align="center" style="vertical-align: center;">
-<a href="https://poica.rpaka.dev">poica.rpaka.dev</a>（試験公開）
+※試験公開ページは2022年12月25日を持って公開を終了致しました。
 </div>
 
 # 概要
